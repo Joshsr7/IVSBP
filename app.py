@@ -1,1 +1,3 @@
-print("Hello! I am your Income vs Spending Budgeting Pal!")
+import streamlit as st
+
+st.title("Budget tracker1\")
