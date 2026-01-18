@@ -1,0 +1,28 @@
+{
+    "fixed_income": 5000.0,
+    "fixed_expenses": {
+        "Phone": 30.0
+    },
+    "monthly": {
+        "February": {
+            "income": [],
+            "expenses": [
+                {
+                    "day": 5,
+                    "amount": 45.0,
+                    "note": "Chick Fil a "
+                }
+            ]
+        },
+        "January": {
+            "income": [
+                {
+                    "day": 11,
+                    "amount": 340.0,
+                    "note": "David"
+                }
+            ],
+            "expenses": []
+        }
+    }
+}
