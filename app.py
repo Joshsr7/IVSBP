@@ -116,3 +116,30 @@ elif menu == "View Monthly Summary":
     st.write("Income:", income)
     st.write("Expenses:", expenses)
     st.write("Remaining:", income - expenses)
+
+    st.subheader("Transaction Timeline")
+
+    transactions = []
+
+    month_data = data["monthly"].get(month, {})
+
+    for inc in month_data.get("income", []):
+        transactions.append({
+            "day": inc["day"],
+            "amount": f"+${inc['amounnt']}",
+            "note": inc["note"]
+        })
+
+    for exp in month_data.get("expenses", []):
+        transactions.append({
+            "day": exp["day"],
+            "amount": f"+${exp['amounnt']}",
+            "note": exp["note"]    
+        })
+
+    transactions.sort(keys=lambda x:["day"])
+
+    for t in transactions:
+        st.write(
+            f"Day {t['day']}  |  {t['amount']}  |  {t['note']}"
+        )
