@@ -126,18 +126,18 @@ elif menu == "View Monthly Summary":
     for inc in month_data.get("income", []):
         transactions.append({
             "day": inc["day"],
-            "amount": f"+${inc['amounnt']}",
+            "amount": f"+${inc['amount']}",
             "note": inc["note"]
         })
 
     for exp in month_data.get("expenses", []):
         transactions.append({
             "day": exp["day"],
-            "amount": f"+${exp['amounnt']}",
+            "amount": f"-${exp['amount']}",
             "note": exp["note"]    
         })
 
-    transactions.sort(keys=lambda x:["day"])
+    transactions.sort(key=lambda x:["day"])
 
     for t in transactions:
         st.write(

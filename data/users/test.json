@@ -22,7 +22,13 @@
                     "note": "David"
                 }
             ],
-            "expenses": []
+            "expenses": [
+                {
+                    "day": 4,
+                    "amount": 120.0,
+                    "note": "necklace"
+                }
+            ]
         }
     }
 }
