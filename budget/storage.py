@@ -39,10 +39,14 @@ def save_user_data(username, data):
 
 def ensure_month(data, month):
 
-    if month not in data:
+    if "monthly" not in data:
         data["monthly"] = {}
+
     if month not in data["monthly"]:
-        data["monthly"][month] = {
-            "income": [],
-            "expenses": []
-        }
+        data["monthly"][month] = {}
+
+    if "income" not in data["monthly"][month]:
+        data["monthly"][month]["income"] = []
+
+    if "expenses" not in data["monthly"][month]:
+        data["monthly"][month]["expenses"] = []
