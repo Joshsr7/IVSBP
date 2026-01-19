@@ -1,5 +1,9 @@
 import streamlit as st
 
+if "page" not in st.session_state:
+    st.session_state.page = "Home"
+
+
 
 st.title("Budget Pal")
 st.write("Welcome! I am your budgeting pal who is here to help you track your income and expenses.")
@@ -66,19 +70,32 @@ current_month = st.selectbox(
 )
 
 
-menu = st.sidebar.radio(
-    "Menu",
-    [
-        "Home",
-        "Add Income",
-        "Add Expense",
-        "Fixed Income",
-        "Fixed Expense",
+st.markdown("### Menu")
 
-    ]
-)
+col1, col2, col3, col4, col5 = st.columns(5)
 
-if menu == "Fixed Income":
+with col1:
+    if st.button("🏠 Home"):
+        st.session_state.page = "Home"
+
+with col2:
+    if st.button("➕ Income"):
+        st.session_state.page = "Add Income"
+
+with col3:
+    if st.button("💸 Expense"):
+        st.session_state.page = "Add Expense"
+
+with col4:
+    if st.button("💼 Salary"):
+        st.session_state.page = "Fixed Income"
+
+with col5:
+    if st.button("📌 Bills"):
+        st.session_state.page = "Fixed Expense"
+
+
+if st.session_state.page == "Fixed Income":
     amount = st.number_input("Monthly Salary", min_value=0.0)
 
     if st.button("Save Salary"):
@@ -86,7 +103,7 @@ if menu == "Fixed Income":
         save_user_data(username, data)
         st.success("Fixed income saved")
 
-elif menu == "Add Income":
+elif st.session_state.page == "Add Income":
     month = current_month
 
     day = st.number_input("Day", min_value=1, max_value=31)
@@ -98,7 +115,7 @@ elif menu == "Add Income":
         save_user_data(username, data)
         st.success("Income added")
 
-elif menu == "Add Expense":
+elif st.session_state.page == "Add Expense":
     month = current_month
     
     day = st.number_input("Day", min_value=1, max_value=31)
@@ -112,7 +129,7 @@ elif menu == "Add Expense":
         save_user_data(username, data)
         st.success("Expense added")
 
-elif menu == "Fixed Expense":
+elif st.session_state.page == "Fixed Expense":
     name = st.text_input("Expense name (Rent, Phone, etc)")
     amount = st.number_input("Monthly amount", min_value=0.0)
 
