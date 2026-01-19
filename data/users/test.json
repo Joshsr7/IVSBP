@@ -35,6 +35,17 @@
                     "category": "Gas"
                 }
             ]
+        },
+        "March": {
+            "income": [],
+            "expenses": [
+                {
+                    "day": 14,
+                    "amount": 24.0,
+                    "note": "help",
+                    "category": "Food"
+                }
+            ]
         }
     }
 }

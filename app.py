@@ -160,83 +160,38 @@ month_data = data["monthly"].get(month, {})
 for inc in month_data.get("income", []):
     transactions.append({
         "day": inc["day"],
-        "amount": f"+${inc['amount']}",
-        "note": inc["note"]
+        "amount": inc["amount"],
+        "note": inc["note"],
+        "type": "income"
     })
 
 for exp in month_data.get("expenses", []):
     transactions.append({
         "day": exp["day"],
-        "amount": f"-${exp['amount']}",
+        "amount": exp["amount"],
         "note": exp.get("note", ""),
+        "type": "expense",
         "category": exp.get("category", "Other")
     })
 
 transactions.sort(key=lambda x: x["day"])
 
-    
 balance = total_monthly_income(data, month)
 
 for t in transactions:
-    amount = float(
-        t["amount"]
-        .replace("$", "")
-        .replace("+", "")
-        .replace("-", "")
-    )
 
-    if t["amount"].startswith("-"):
-        balance -= amount
-    else: 
-        balance += amount
-        
-    color = "green" if not t["amount"].startswith("-") else "red"
+    if t["type"] == "expense":
+        balance -= t["amount"]
+        sign = "🔴 -"
+    else:
+        balance += t["amount"]
+        sign = "🟢 +"
 
-    components.html(
-        f"""
-        <div style="
-            padding: 14px;
-            margin-bottom: 12px;
-            border-radius: 14px;
-            background-color: #f8f9fa;
-        ">
-
-            <div style="
-                font-size: 14px;
-                font-weight: 600;
-                color: #555;
-                margin-bottom: 6px;
-            ">
-                Day {t['day']}
-            </div>
-
-            <div style="
-                font-size: 20px;
-                font-weight: bold;
-                color: {color};
-            ">
-                {t['amount']}
-            </div>
-
-            <div style="
-                margin-top: 4px;
-                font-size: 15px;
-            ">
-                {t['note']}
-            </div>
-
-            <div style="
-                margin-top: 6px;
-                font-size: 13px;
-                color: gray;
-            ">
-                Balance: ${balance}
-            </div>
-
-        </div>
-        """,
-        height=150
-)
+    st.markdown(f"### Day {t['day']}")
+    st.write(f"{sign}${t['amount']:,.2f}")
+    st.write(t["note"])
+    st.caption(f"Balance: ${balance:,.2f}")
+    st.divider()
 
 
 
