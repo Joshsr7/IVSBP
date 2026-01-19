@@ -13,6 +13,7 @@ def add_daily_expense(data, month, day, amount, note="", category="Other"):
     return data
 
 def set_fixed_expense(data, name, amount, category="Other"):
+    data = json.load(file)
     if "fixed_expenses" not in data:
         data["fixed_expenses"] = []
 
