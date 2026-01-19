@@ -27,6 +27,12 @@
                     "day": 4,
                     "amount": 120.0,
                     "note": "necklace"
+                },
+                {
+                    "day": 24,
+                    "amount": 321.0,
+                    "note": "Wawa",
+                    "category": "Gas"
                 }
             ]
         }

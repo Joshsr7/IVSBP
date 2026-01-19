@@ -4,6 +4,16 @@ import streamlit as st
 st.title("Budget Pal")
 st.write("Welcome! I am your budgeting pal who is here to help you track your income and expenses.")
 
+CATEGORIES = [
+    "Food",
+    "Gas",
+    "Housing",
+    "Bills",
+    "Subscriptions",
+    "Fun",
+    "Other"
+]
+
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -45,18 +55,30 @@ if st.session_state.logged_in:
 
     st.success(f"Logged in as {username}")
 
-menu = st.selectbox(
-    "Choose an option",
+st.header("Current Month")
+
+current_month = st.selectbox(
+    "Select month",
     [
-        "Set Fixed Income",
-        "Add Extra Income",
-        "Set Fixed Expense",
-        "Add Daily Expense",
-        "View Monthly Summary"
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
     ]
 )
 
-if menu == "Set Fixed Income":
+
+menu = st.sidebar.radio(
+    "Menu",
+    [
+        "Home",
+        "Add Income",
+        "Add Expense",
+        "Fixed Income",
+        "Fixed Expense",
+
+    ]
+)
+
+if menu == "Fixed Income":
     amount = st.number_input("Monthly Salary", min_value=0.0)
 
     if st.button("Save Salary"):
@@ -64,11 +86,8 @@ if menu == "Set Fixed Income":
         save_user_data(username, data)
         st.success("Fixed income saved")
 
-elif menu == "Add Extra Income":
-    month = st.selectbox("Month", [
-        "January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"
-    ])
+elif menu == "Add Income":
+    month = current_month
 
     day = st.number_input("Day", min_value=1, max_value=31)
     amount = st.number_input("Amount", min_value=0.0)
@@ -79,67 +98,103 @@ elif menu == "Add Extra Income":
         save_user_data(username, data)
         st.success("Income added")
 
-elif menu == "Add Daily Expense":
-    month = st.selectbox("Month", [
-        "January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"
-    ])
+elif menu == "Add Expense":
+    month = current_month
+    
     day = st.number_input("Day", min_value=1, max_value=31)
     amount = st.number_input("Amount", min_value=0.0)
     note = st.text_input("Note")
 
+    category = st.selectbox("Category", CATEGORIES)
+
     if st.button("Add Expense"):
-        data = add_daily_expense(data, month, day, amount, note)
+        data = add_daily_expense(data, month, day, amount, note, category)
         save_user_data(username, data)
         st.success("Expense added")
 
-elif menu == "Set Fixed Expense":
+elif menu == "Fixed Expense":
     name = st.text_input("Expense name (Rent, Phone, etc)")
     amount = st.number_input("Monthly amount", min_value=0.0)
+
+    category = st.selectbox("Category", CATEGORIES)
 
     if st.button("Save Fixed Expense"):
         data = set_fixed_expense(data, name, amount)
         save_user_data(username, data)
         st.success("Fixed expense saved")
 
-elif menu == "View Monthly Summary":
-    month = st.selectbox(
-        "Which month do you want to view?",
-        list(data["monthly"].keys()) or
-        ["No data yet"]
+month = current_month
+
+income = total_monthly_income(data, month)
+expenses = total_monthly_expenses(data, month)
+    
+st.write("### Summary")
+st.write("Income:", income)
+st.write("Expenses:", expenses)
+st.write("Remaining:", income - expenses)
+
+st.subheader("Transaction Timeline")
+
+transactions = []
+
+month_data = data["monthly"].get(month, {})
+
+for inc in month_data.get("income", []):
+    transactions.append({
+        "day": inc["day"],
+        "amount": f"+${inc['amount']}",
+        "note": inc["note"]
+    })
+
+for exp in month_data.get("expenses", []):
+    transactions.append({
+        "day": exp["day"],
+        "amount": f"-${exp['amount']}",
+        "note": exp.get("note", ""),
+        "category": exp.get("category", "Other")
+    })
+
+transactions.sort(key=lambda x: x["day"])
+
+    
+balance = total_monthly_income(data, month)
+
+for t in transactions:
+    amount = float(
+        t["amount"]
+        .replace("$", "")
+        .replace("+", "")
+        .replace("-", "")
     )
 
-    income = total_monthly_income(data, month)
-    expenses = total_monthly_expenses(data, month)
-    
-    st.write("### Summary")
-    st.write("Income:", income)
-    st.write("Expenses:", expenses)
-    st.write("Remaining:", income - expenses)
+    if t["amount"].startswith("-"):
+        balance -= amount
+    else: 
+        balance += amount
+        
+    color = "green" if not t["amount"].startswith("-") else "red"
 
-    st.subheader("Transaction Timeline")
+    st.markdown(
+        f"""
+        <div style="
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            font-size: 16px;
+        ">
+            <b>Day {t['day']}</b>  
+            <span style="color:{color}; font-weight:bold;">
+                {t['amount']}
+            </span>  
+            — {t['note']}  
+            <br>
+            <span style="color:gray; font-size:14px;">
+                Balance: ${balance}
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True
+)
 
-    transactions = []
 
-    month_data = data["monthly"].get(month, {})
-
-    for inc in month_data.get("income", []):
-        transactions.append({
-            "day": inc["day"],
-            "amount": f"+${inc['amount']}",
-            "note": inc["note"]
-        })
-
-    for exp in month_data.get("expenses", []):
-        transactions.append({
-            "day": exp["day"],
-            "amount": f"-${exp['amount']}",
-            "note": exp["note"]    
-        })
-
-    transactions.sort(key=lambda x:["day"])
-
-    for t in transactions:
-        st.write(
-            f"Day {t['day']}  |  {t['amount']}  |  {t['note']}"
-        )
