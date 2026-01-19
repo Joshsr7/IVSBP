@@ -54,13 +54,22 @@ if not st.session_state.logged_in:
     st.stop()
 
 if st.session_state.logged_in:
-
     username = st.session_state.username
     data = load_user_data(username)
-    if not data:
-        data = {}
+
+    
+    if not isinstance(data, dict):
+        data = {
+            "fixed_income": 0,
+            "fixed_expenses": [],
+            "monthly": {}
+        }
+
+    data.setdefault("fixed_expenses", [])
+    data.setdefault("monthly", {})
 
     st.success(f"Logged in as {username}")
+
 
 st.header("Current Month")
 
@@ -146,7 +155,7 @@ elif st.session_state.page == "Fixed Expense":
     category = st.selectbox("Category", CATEGORIES)
 
     if st.button("Save Fixed Expense"):
-        data = set_fixed_expense(data, name, amount)
+        data = set_fixed_expense(data, name, amount, category)
         save_user_data(username, data)
         st.success("Fixed expense saved")
 
@@ -185,7 +194,7 @@ for exp in month_data.get("expenses", []):
 
 transactions.sort(key=lambda x: x["day"])
 
-balance = total_monthly_income(data, month)
+balance = 0
 
 for t in transactions:
 
