@@ -192,26 +192,51 @@ for t in transactions:
     color = "green" if not t["amount"].startswith("-") else "red"
 
     st.markdown(
-        f"""
+    f"""
+    <div style="
+        padding: 14px;
+        margin-bottom: 12px;
+        border-radius: 14px;
+        background-color: #f8f9fa;
+    ">
+
         <div style="
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-            font-size: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
         ">
-            <b>Day {t['day']}</b>  
-            <span style="color:{color}; font-weight:bold;">
-                {t['amount']}
-            </span>  
-            — {t['note']}  
-            <br>
-            <span style="color:gray; font-size:14px;">
-                Balance: ${balance}
-            </span>
+            Day {t['day']}
         </div>
-        """,
-        unsafe_allow_html=True
+
+        <div style="
+            font-size: 20px;
+            font-weight: bold;
+            color: {color};
+        ">
+            {t['amount']}
+        </div>
+
+        <div style="
+            margin-top: 4px;
+            font-size: 15px;
+        ">
+            {t['note']}
+        </div>
+
+        <div style="
+            margin-top: 6px;
+            font-size: 13px;
+            color: gray;
+        ">
+            Balance: ${balance}
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
+
 
 
