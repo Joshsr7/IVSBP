@@ -57,6 +57,8 @@ if st.session_state.logged_in:
 
     username = st.session_state.username
     data = load_user_data(username)
+    if not data:
+        data = {}
 
     st.success(f"Logged in as {username}")
 

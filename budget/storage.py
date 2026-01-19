@@ -13,22 +13,30 @@ def load_user_data(username):
     file_path = get_user_file(username)
 
     default_data = {
-    "fixed_income": 0,
-    "fixed_expenses": [],
-    "monthly": {}
-}
-
+        "fixed_income": 0,
+        "fixed_expenses": [],
+        "monthly": {}
+    }
 
     if not os.path.exists(file_path):
         save_user_data(username, default_data)
         return default_data
-    
+
     try:
         with open(file_path, "r") as file:
-            return json.load(file)
+            data = json.load(file)
     except json.JSONDecodeError:
         save_user_data(username, default_data)
         return default_data
+
+    
+    if "fixed_expenses" not in data or not isinstance(data["fixed_expenses"], list):
+        data["fixed_expenses"] = []
+
+    if "monthly" not in data or not isinstance(data["monthly"], dict):
+        data["monthly"] = {}
+
+    return data
 
 
 def save_user_data(username, data):
