@@ -39,6 +39,8 @@ def save_user_data(username, data):
 
 def ensure_month(data, month):
 
+    if month not in data:
+        data["monthly"] = {}
     if month not in data["monthly"]:
         data["monthly"][month] = {
             "income": [],
