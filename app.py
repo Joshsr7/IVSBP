@@ -126,7 +126,14 @@ elif st.session_state.page == "Add Expense":
     category = st.selectbox("Category", CATEGORIES)
 
     if st.button("Add Expense"):
-        data = add_daily_expense(data, month, day, amount, note, category)
+        data = add_daily_expense(
+            data, 
+            month, 
+            day, 
+            amount, 
+            note, 
+            category or "Other"
+        )
         save_user_data(username, data)
         st.success("Expense added")
 
