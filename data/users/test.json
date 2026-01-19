@@ -33,6 +33,12 @@
                     "amount": 321.0,
                     "note": "Wawa",
                     "category": "Gas"
+                },
+                {
+                    "day": 1,
+                    "amount": 21.0,
+                    "note": "as",
+                    "category": "Food"
                 }
             ]
         },

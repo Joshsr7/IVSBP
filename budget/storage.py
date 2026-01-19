@@ -13,10 +13,11 @@ def load_user_data(username):
     file_path = get_user_file(username)
 
     default_data = {
-        "fixed_income": 0,
-        "fixed_expenses": {},
-        "monthly": {}
-    }
+    "fixed_income": 0,
+    "fixed_expenses": [],
+    "monthly": {}
+}
+
 
     if not os.path.exists(file_path):
         save_user_data(username, default_data)
