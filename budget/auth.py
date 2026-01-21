@@ -1,7 +1,7 @@
 import json
 import os
 import hashlib
-
+from budget.storage import save_user_data
 
 USERS_FILE = "data/users/users.json"
 
@@ -28,11 +28,17 @@ def save_users(users):
 def signup(username, password):
     users = load_users()
 
-    if username in users: 
-        return False, "Username already exists"
+    if username in users:
+        return False, "User already exists"
 
-    users[username] = hash_password(password)
+    users[username] = password
     save_users(users)
+
+    save_user_data(username, {
+        "fixed_income": 0,
+        "fixed_expenses": [],
+        "monthly": {}
+    })
 
     return True, "Account created"
 

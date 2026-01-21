@@ -30,6 +30,9 @@ from budget.storage import load_user_data, save_user_data
 from budget.income import set_fixed_income, add_extra_income, total_monthly_income
 from budget.spending import set_fixed_expense, add_daily_expense, total_monthly_expenses
 
+
+
+
 if not st.session_state.logged_in:
     st.subheader("Login or Sign Up")
     option = st.selectbox("Choose", ["Login", "Sign Up"])
