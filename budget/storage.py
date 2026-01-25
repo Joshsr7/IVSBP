@@ -36,6 +36,7 @@ def load_user_data(username):
     if "monthly" not in data or not isinstance(data["monthly"], dict):
         data["monthly"] = {}
 
+    
     return data
 
 
