@@ -35,18 +35,20 @@ from budget.spending import set_fixed_expense, add_daily_expense, total_monthly_
 
 if not st.session_state.logged_in:
     st.subheader("Login or Sign Up")
-    option = st.selectbox("Choose", ["Login", "Sign Up"])
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    with st.form("auth_form"):
+        option = st.selectbox("Choose", ["Login", "Sign Up"])
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
 
+        submitted = st.form_submit_button("Submit")
 
-    if st.button("Submit"):
+    if submitted:
         if option == "Login":
             success, msg = login(username, password)
         else:
             success, msg = signup(username, password)
-        
+
         if success:
             st.session_state.logged_in = True
             st.session_state.username = username
@@ -54,6 +56,7 @@ if not st.session_state.logged_in:
             st.rerun()
         else:
             st.error(msg)
+
     st.stop()
 
 if st.session_state.logged_in:
