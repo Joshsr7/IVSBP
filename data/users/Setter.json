@@ -1,0 +1,16 @@
+{
+    "fixed_income": 0,
+    "fixed_expenses": [],
+    "monthly": {
+        "January": {
+            "income": [
+                {
+                    "day": 18,
+                    "amount": 1355.0,
+                    "note": "David"
+                }
+            ],
+            "expenses": []
+        }
+    }
+}
