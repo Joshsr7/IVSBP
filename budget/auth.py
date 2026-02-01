@@ -31,7 +31,7 @@ def signup(username, password):
     if username in users:
         return False, "User already exists"
 
-    users[username] = password
+    users[username] = hash_password(password)
     save_users(users)
 
     save_user_data(username, {
