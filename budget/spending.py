@@ -1,18 +1,20 @@
-from budget.storage import ensure_month
+from budget.storage import ensure_month, save_user_data
 
-def add_daily_expense(data, month, day, amount, note="", category="Other"):
+def add_daily_expense(username, data, month, day, amount, note="", category="Other"):
     ensure_month(data, month)
 
     data["monthly"][month]["expenses"].append({
         "day": day,
-        "amount": amount,
+        "amount": float(amount),
         "note": note,
         "category": category
     })
 
+    save_user_data(username, data)
+
     return data
 
-def set_fixed_expense(data, name, amount, category="Other"):
+def set_fixed_expense(username, data, name, amount, category="Other"):
 
     if not isinstance(data, dict):
         data = {}
@@ -22,9 +24,12 @@ def set_fixed_expense(data, name, amount, category="Other"):
 
     data["fixed_expenses"].append({
         "name": name,
-        "amount": amount,
+        "amount": float(amount),
         "category": category
     })
+
+   
+    save_user_data(username, data)
 
     return data
 

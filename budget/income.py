@@ -1,17 +1,21 @@
-from budget.storage import ensure_month
+from budget.storage import ensure_month, save_user_data
 
-def set_fixed_income(data, amount):
-    data["fixed_income"] = amount
+def set_fixed_income(username, data, amount):
+    data["fixed_income"] = float(amount)
+    save_user_data(username, data)
     return data
 
-def add_extra_income(data, month, day, amount, note=""):
+def add_extra_income(username, data, month, day, amount, note=""):
     ensure_month(data, month)
 
     data["monthly"][month]["income"].append({
         "day": day,
-        "amount": amount,
+        "amount": float(amount),
         "note": note
     })
+
+    
+    save_user_data(username, data)
 
     return data
 

@@ -8,9 +8,48 @@
                     "day": 18,
                     "amount": 1355.0,
                     "note": "David"
+                },
+                {
+                    "day": 31,
+                    "amount": 1268.0,
+                    "note": "david"
                 }
             ],
-            "expenses": []
+            "expenses": [
+                {
+                    "day": 31,
+                    "amount": 126.0,
+                    "note": "dizmo",
+                    "category": "Other"
+                },
+                {
+                    "day": 31,
+                    "amount": 350.0,
+                    "note": "manu 2",
+                    "category": "Other"
+                },
+                {
+                    "day": 21,
+                    "amount": 42.0,
+                    "note": "hollister"
+                },
+                {
+                    "day": 18,
+                    "amount": 300.0,
+                    "note": "MAnu 1"
+                },
+                {
+                    "day": 18,
+                    "amount": 135.0,
+                    "note": "Dizmo"
+                },
+                {
+                    "day": 20,
+                    "amount": 252.0,
+                    "note": "CAr",
+                    "category": "Other"
+                }
+            ]
         }
     }
 }

@@ -3,7 +3,8 @@ import os
 import hashlib
 from budget.storage import save_user_data
 
-USERS_FILE = "data/users/users.json"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+USERS_FILE = os.path.join(BASE_DIR, "data", "users", "users.json")
 
 
 def hash_password(password):
@@ -19,7 +20,7 @@ def load_users():
         return json.load(file)
 
 def save_users(users):
-    os.makedirs("data/users", exist_ok=True)
+    os.makedirs(os.path.dirname(USERS_FILE), exist_ok=True)
 
     with open(USERS_FILE, "w") as file:
         json.dump(users, file, indent=4)

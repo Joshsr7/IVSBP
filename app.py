@@ -1,6 +1,3 @@
-print("Starting Budget Pal App")
-
-
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -121,7 +118,6 @@ if st.session_state.page == "Fixed Income":
 
     if st.button("Save Salary"):
         data = set_fixed_income(data, amount)
-        save_user_data(username, data)
         st.success("Fixed income saved")
 
 elif st.session_state.page == "Add Income":
@@ -132,8 +128,7 @@ elif st.session_state.page == "Add Income":
     note = st.text_input("Note")
 
     if st.button("Add Income"):
-        data = add_extra_income(data, month, day, amount, note)
-        save_user_data(username, data)
+        data = add_extra_income(username, data, month, day, amount, note)
         st.success("Income added")
 
 elif st.session_state.page == "Add Expense":
@@ -147,6 +142,7 @@ elif st.session_state.page == "Add Expense":
 
     if st.button("Add Expense"):
         data = add_daily_expense(
+            username,
             data, 
             month, 
             day, 
@@ -154,7 +150,6 @@ elif st.session_state.page == "Add Expense":
             note, 
             category or "Other"
         )
-        save_user_data(username, data)
         st.success("Expense added")
 
 elif st.session_state.page == "Fixed Expense":
@@ -164,8 +159,7 @@ elif st.session_state.page == "Fixed Expense":
     category = st.selectbox("Category", CATEGORIES)
 
     if st.button("Save Fixed Expense"):
-        data = set_fixed_expense(data, name, amount, category)
-        save_user_data(username, data)
+        data = set_fixed_expense(username, data, name, amount, category)
         st.success("Fixed expense saved")
 
 month = current_month
