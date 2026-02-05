@@ -29,7 +29,7 @@ from budget.auth import signup, login
 from budget.storage import load_user_data, save_user_data
 from budget.income import set_fixed_income, add_extra_income, total_monthly_income
 from budget.spending import set_fixed_expense, add_daily_expense, total_monthly_expenses
-
+from budget.storage import delete_income, delete_expense
 
 
 
@@ -178,22 +178,23 @@ transactions = []
 
 month_data = data["monthly"].get(month, {})
 
-for inc in month_data.get("income", []):
+for i, inc in enumerate(month_data.get("income", [])):
     transactions.append({
-        "day": inc["day"],
-        "amount": inc["amount"],
-        "note": inc["note"],
-        "type": "income"
-    })
-
-for exp in month_data.get("expenses", []):
+    "day": inc["day"],
+    "amount": inc["amount"],
+    "note": inc["note"],
+    "type": "income",
+    "index": i
+})
+for i, exp in enumerate(month_data.get("expenses", [])):
     transactions.append({
-        "day": exp["day"],
-        "amount": exp["amount"],
-        "note": exp.get("note", ""),
-        "type": "expense",
-        "category": exp.get("category", "Other")
-    })
+    "day": exp["day"],
+    "amount": exp["amount"],
+    "note": exp.get("note", ""),
+    "type": "expense",
+    "category": exp.get("category", "Other"),
+    "index": i
+})
 
 transactions.sort(key=lambda x: x["day"])
 
@@ -201,17 +202,30 @@ balance = 0
 
 for t in transactions:
 
-    if t["type"] == "expense":
-        balance -= t["amount"]
-        sign = "🔴 -"
-    else:
-        balance += t["amount"]
-        sign = "🟢 +"
+    colA, colB = st.columns([4,1])
 
-    st.markdown(f"### Day {t['day']}")
-    st.write(f"{sign}${t['amount']:,.2f}")
-    st.write(t["note"])
-    st.caption(f"Balance: ${balance:,.2f}")
+    with colA:
+        if t["type"] == "expense":
+            balance -= t["amount"]
+            sign = "🔴 -"
+        else:
+            balance += t["amount"]
+            sign = "🟢 +"
+
+        st.markdown(f"### Day {t['day']}")
+        st.write(f"{sign}${t['amount']:,.2f}")
+        st.write(t["note"])
+        st.caption(f"Balance: ${balance:,.2f}")
+
+    with colB:
+        if st.button("🗑️", key=f"del_{t['type']}_{t['index']}"):
+            if t["type"] == "income":
+                delete_income(username, data, month, t["index"])
+            else:
+                delete_expense(username, data, month, t["index"])
+
+            st.rerun()
+
     st.divider()
 
 
