@@ -64,3 +64,21 @@ def ensure_month(data, month):
 
     if "expenses" not in data["monthly"][month]:
         data["monthly"][month]["expenses"] = []
+
+
+
+
+def delete_income(username, data, month, index):
+    try:
+        data["monthly"][month]["income"].pop(index)
+        save_user_data(username, data)
+    except (KeyError, IndexError):
+        pass
+
+
+def delete_expense(username, data, month, index):
+    try:
+        data["monthly"][month]["expenses"].pop(index)
+        save_user_data(username, data)
+    except (KeyError, IndexError):
+        pass
